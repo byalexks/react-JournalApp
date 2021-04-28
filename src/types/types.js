@@ -6,7 +6,10 @@
 
 
         uiSetError: '[UI] SetError',
-        uiRemoveError: '[UI] RemoveError'
+        uiRemoveError: '[UI] RemoveError',
+
+        uiStartLoading: '[UI] Start loading',
+        uiFinishLoading: '[UI] Finish loading'
 
 
     }
