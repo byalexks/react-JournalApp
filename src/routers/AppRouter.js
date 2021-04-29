@@ -7,22 +7,28 @@ import { AuthRouter } from "./AuthRouter";
 import { login } from "../actions/auth";
 import { PrivateRoutes } from "./PrivateRoutes";
 import { PublicRoute } from "./PublicRoute";
+import {starLoadNotes } from "../actions/notes";
 
 
 export const AppRouter = () => {
 
   const dispatch = useDispatch()
 
+  //este verifica que este entrando 
   const [cheking, setCheking] = useState(true)
+  // este dice si entra al / o no
   const [isLoggeIn, setIsLoggeIn] = useState(false)
 
     useEffect(() => {
 
-      firebase.auth().onAuthStateChanged((user) => {
+      firebase.auth().onAuthStateChanged(async (user) => {
+
         if (user?.uid) {
+
           dispatch(login(user.uid, user.displayName));
           setIsLoggeIn(true)
-          console.log(user);
+          dispatch(starLoadNotes(user.uid));
+          
         } else {
           setIsLoggeIn(false)
         }
@@ -33,7 +39,7 @@ export const AppRouter = () => {
 
     if (cheking) {
       return (
-          <h1>esperando...</h1>
+          <h1>Wait...</h1>
       )
       
     }

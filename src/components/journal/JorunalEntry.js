@@ -1,22 +1,27 @@
 import React from 'react'
 
-export const JorunalEntry = () => {
+export const JorunalEntry = ({id, date, title, body, url}) => {
+  
+
     return (
       <div className="jorunal__entry pointer">
+       { 
+      //  if url es igual a null no lo muestra
+        url && 
         <div
           className="jorunal__entry-picture"
           style={{
             backgroundSize: "cover",
-            backgroundImage:
-              "url(https://img.zonared.com/images/analisis/2500/2515/5.jpg)", 
+            backgroundImage:`url(${url})`, 
           }}
-        ></div>
+         ></div>
+      }
         <div className="journal__entry-body">
             <p className="journal__entry-title">
-                Un nuevo dia
+                {title}
             </p>
             <p className="journal-entry-content">
-                asdasfdasfasfafaffasfdasfasdfasdasfasfasfasf            
+                {body}            
             </p>
         </div>
 

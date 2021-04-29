@@ -1,13 +1,19 @@
 import React from 'react'
-import {useDispatch} from 'react-redux'
+import { useDispatch, useSelector } from "react-redux";
 import { starLogout } from '../../actions/auth'
+import { startNewNote } from '../../actions/notes';
 import { JournalEntries } from './JournalEntries'
 
 export const Sidebar = () => {
 
+    const handleAddNew = () =>{
+        dispatch( startNewNote() );
+    }
+
 
     const dispatch = useDispatch()
-
+    // useSelect para buscar cosas del redux
+    const {name} = useSelector(state => state.auth)
     const handleLougout = ()=>{
        dispatch( starLogout() )
 
@@ -18,7 +24,7 @@ export const Sidebar = () => {
             <div className="journal__sidebar-navbar">
                 <h3 className="mt-5">
                     <i className="far fa-moon"></i>
-                    <span> Alexander</span>
+                    <span> {name}</span>
                 </h3>
 
                 <button 
@@ -28,7 +34,10 @@ export const Sidebar = () => {
                     Logout
                 </button>
             </div>
-            <div className="journal__new-entry">
+            <div 
+                onClick={handleAddNew}
+                className="journal__new-entry"
+            >
                 <i className="far fa-calendar-plus fa-5x"></i>
                 <p>
                     New entry
