@@ -10,6 +10,8 @@ export const Sidebar = () => {
         dispatch( startNewNote() );
     }
 
+    
+
 
     const dispatch = useDispatch()
     // useSelect para buscar cosas del redux
