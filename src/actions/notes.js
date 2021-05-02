@@ -2,9 +2,12 @@ import Swal from "sweetalert2";
 import { types } from "../types/types";
 import { db } from "../firebase/firebase-config";
 import { loadNotes } from "../helpers/loadNotes";
+import { fileUpload } from "../helpers/fileUpload";
 
 
  export const startNewNote = ()=>{
+
+    // react-journalapp
      return async(dispatch, getState) => {
          
         const {uid} = getState().auth;
@@ -18,6 +21,7 @@ import { loadNotes } from "../helpers/loadNotes";
         const doc = await db.collection(`${uid}/journal/notes`).add(newNote)
       
         dispatch( activeNote(doc.id, newNote) );
+        dispatch(addNewNote(doc.id, newNote));
      }
  }
 
@@ -28,6 +32,14 @@ import { loadNotes } from "../helpers/loadNotes";
     payload: {
         id,
         ...note,
+    }
+
+ })
+
+ export const addNewNote = (id,note) =>({
+    type: types.notesAddNew,
+    payload: {
+        id, ...note
     }
 
  })
@@ -77,5 +89,69 @@ import { loadNotes } from "../helpers/loadNotes";
             ...note
         }
     }
+
+ })
+
+ export const starUploading = (file)=>{
+
+    return async(dispatch, getState)=>{
+        
+        const {active:activeNote} = getState().notes
+
+        Swal.fire({
+            title: 'Uploading...',
+            text: 'Please wait...',
+            allowOutsideClick: false,
+            onBeforeOpen: ()=>{
+                Swal.showLoading();
+            }
+        })
+
+        const fileUrl = await fileUpload(file);
+        activeNote.url = fileUrl;
+
+        dispatch( starSaveNotes(activeNote));
+
+        Swal.close();
+
+    }
+
+ }
+
+ export const startDeleting = (id)=>{
+     return async(dispatch, getState)=>{
+
+        const iud = getState().auth.uid;
+
+        await db.doc(`${iud}/journal/notes/${id}`).delete();
+        Swal.fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, delete it!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire("Deleted!", "Your file has been deleted.", "success");
+            dispatch( deleteNote(id) );
+          }
+        });
+        
+
+     }
+ }
+
+ export const deleteNote = (id) =>({
+     
+    type: types.notesDelete,
+    payload: id
+
+ })
+
+ export const notesLogout = () => ({
+
+    type: types.notesLogoutCleaning,
 
  })
