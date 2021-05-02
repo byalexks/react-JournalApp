@@ -29,16 +29,15 @@ export const NotesAppBar = () => {
 
     return (
       <div className="notes__appbar">
-        <span>{moment().format('MMMM Do YYYY')}</span>
+        <span>{moment().format("MMMM Do YYYY")}</span>
         <div>
-
-          <input 
-            id='fileSelector'
-            type='file'
-            name='file'
-            style={{display:'none'}}
+          <input
+            id="fileSelector"
+            type="file"
+            name="file"
+            accept="image/x-png,image/gif,image/jpeg"
+            style={{ display: "none" }}
             onChange={handleFileChange}
-            
           />
           <button onClick={handlePictureClick} className="btn">
             Picture
